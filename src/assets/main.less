@@ -1,0 +1,87 @@
+body {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  color: #333;
+}
+
+#linter {
+  margin-top: 10px;
+
+  & > .row {
+    height: calc(100vh - 130px);
+  }
+}
+
+.ace_editor {
+  font: 12px/normal 'Inconsolata-g', 'Menlo', 'Consolas', 'source-code-pro', monospace;
+  border: 1px solid #ddd;
+}
+
+h3 {
+  font-size: 1.1rem;
+  font-weight: 400;
+  line-height: 2rem;
+
+  .btn {
+    float: right;
+    min-width: 80px;
+  }
+
+  small {
+    font-size: 60%;
+    color: #999999;
+  }
+}
+
+#lint-messages {
+  margin: 0;
+  padding: 0 10px 20px 0;
+  max-height: calc(100vh - 130px);
+  overflow: auto;
+
+  li {
+    display: block;
+    list-style: none;
+    padding: 5px 8px;
+    margin-bottom: 10px;
+    color: #bf111f;
+    border: 1px solid #fbd4dc;
+    background-color: #fde6e8;
+    font-size: 0.8rem;
+
+    &.warning {
+      color: #b26e12;
+      border: 1px solid #fbe7b8;
+      background-color: #fdf9e2;
+    }
+
+    .position {
+      //color: #6610f2;
+      font-family: 'Inconsolata-g', 'Menlo', 'Consolas', 'source-code-pro', monospace;
+      font-weight: bold;
+
+      //&:hover, &:active, &:focus {
+      //  cursor: pointer;
+      //  text-decoration: underline;
+      //}
+    }
+
+    .ruleId {
+      color: #007bff;
+
+      &:hover, &:active, &:focus {
+        cursor: pointer;
+        text-decoration: underline;
+      }
+    }
+
+    .source, .nodeType {
+      display: none;
+    }
+
+    &:hover, &:active, &:focus {
+      cursor: pointer;
+      background-color: #ffeeee;
+    }
+  }
+}
