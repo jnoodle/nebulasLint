@@ -7,12 +7,31 @@ import variables from 'eslint-config-airbnb-base/rules/variables'
 import es6 from 'eslint-config-airbnb-base/rules/es6'
 // import imports from 'eslint-config-airbnb-base/rules/imports'
 
-// nebulas lint rules by jnoodle
+// nebulas lint recommend rules by jnoodle
 const rules = {
 
   'no-global-assign': 'error',
 
   'indent': ['warning', 2],
+
+  'no-multi-spaces': ['error', {
+    ignoreEOLComments: true,
+  }],
+
+  'object-shorthand': ['warn', 'always', {
+    ignoreConstructors: false,
+    avoidQuotes: true,
+  }],
+
+  'comma-dangle': ['warn', {
+    arrays: 'always-multiline',
+    objects: 'always-multiline',
+    imports: 'always-multiline',
+    exports: 'always-multiline',
+    functions: 'always-multiline',
+  }],
+
+  'prefer-template': 'warn',
 
   // Unsupported methods
   "disallow-methods": [2, [
