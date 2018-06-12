@@ -4,7 +4,10 @@
       <b-col md="5">
         <h3>Source Code
           <small>( paste your code here )</small>
-          <b-button variant="warning" @click="lint" class="pull-right" size="sm">Lint</b-button>
+          <b-button variant="warning" @click="lint" class="pull-right" size="sm"
+                    :disabled="linting">
+            {{linting?'Linting...':'Lint'}}
+          </b-button>
         </h3>
         <editor
           v-model="sourceCode"
@@ -69,6 +72,7 @@
     data() {
       return {
         filterWarning: false,
+        linting: false,
         sourceCode: `var a = 1\nvar b = c\n\nconsole.log(d)`,
         fixedCode: '',
         messages: [],
@@ -93,52 +97,64 @@
       },
       // lint code
       lint() {
-        let linter = new Linter()
+        this.linting = true
 
-        // define parser: use 'babel-eslint'
-        linter.defineParser('nabulas-parser', parser);
+        // fix waiting linting dom update
+        setTimeout(() => {
 
-        // define custom rules
-        linter.defineRule('disallow-methods', {
-          create(context) {
-            var disallowedMethods = context.options[0];
+          let linter = new Linter()
 
-            return {
-              "CallExpression": function (node) {
-                console.log(node);
-                disallowedMethods.forEach(function (disallowedMethod) {
+          // define parser: use 'babel-eslint'
+          linter.defineParser('nabulas-parser', parser);
 
-                  if ((node.callee.name && node.callee.name === disallowedMethod)
-                    || (node.callee.property && node.callee.property.name && node.callee.property.name === disallowedMethod)) {
-                    context.report(node, `Unsupported method: '${disallowedMethod}'.`);
-                  }
-                });
-              }
-            };
+          // define custom rules
+          linter.defineRule('disallow-methods', {
+            create(context) {
+              var disallowedMethods = context.options[0];
+
+              return {
+                "CallExpression": function (node) {
+                  console.log(node);
+                  disallowedMethods.forEach(function (disallowedMethod) {
+
+                    if ((node.callee.name && node.callee.name === disallowedMethod)
+                      || (node.callee.property && node.callee.property.name && node.callee.property.name === disallowedMethod)) {
+                      context.report(node, `Unsupported method: '${disallowedMethod}'.`);
+                    }
+                  });
+                }
+              };
+            }
+          });
+
+          // verify config
+          const opts = {
+            root: true,
+            parser: 'nabulas-parser',
+            env: {
+              browser: false,
+              node: true,
+              es6: true,
+            },
+            globals,
+            rules: this.rules
           }
-        });
 
-        // verify config
-        const opts = {
-          root: true,
-          parser: 'nabulas-parser',
-          env: {
-            browser: false,
-            node: true,
-            es6: true,
-          },
-          globals,
-          rules: this.rules
-        }
+          let result = linter.verify(this.sourceCode, opts)
+          console.log(result);
+          this.messages = result || []
 
-        let result = linter.verify(this.sourceCode, opts)
-        console.log(result);
-        this.messages = result || []
+          let fixed = linter.verifyAndFix(this.sourceCode, opts)
+          this.fixedCode = fixed.output || ''
 
-        let fixed = linter.verifyAndFix(this.sourceCode, opts)
-        this.fixedCode = fixed.output || ''
+          this.markError(!this.filterWarning)
 
-        this.markError(!this.filterWarning)
+        }, 50)
+
+        // stop loading
+        setTimeout(() => {
+          this.linting = false
+        }, 1500)
 
       },
       // set level
