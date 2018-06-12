@@ -4,10 +4,6 @@
 
 A Tool for nebulas smart contract code lint. Analyze source code to flag programming errors, bugs, stylistic errors, and suspicious constructs.
 
-## Demo
-
-[http://lint.nebulas.cool](http://lint.nebulas.cool)
-
 ## Rules
 
 [https://github.com/jnoodle/nebulasLint/blob/master/src/lint/rules.js](https://github.com/jnoodle/nebulasLint/blob/master/src/lint/rules.js)
