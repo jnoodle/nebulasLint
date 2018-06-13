@@ -114,7 +114,6 @@
 
               return {
                 "CallExpression": function (node) {
-                  console.log(node);
                   disallowedMethods.forEach(function (disallowedMethod) {
 
                     if ((node.callee.name && node.callee.name === disallowedMethod)
